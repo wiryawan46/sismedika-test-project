@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"errors"
 	"sismedika-test-project/internal/book/repository"
+	"sismedika-test-project/internal/shared"
 
 	"github.com/google/uuid"
 	"sismedika-test-project/internal/book/domain"
@@ -32,8 +32,8 @@ func (s *bookService) GetBookByID(ctx context.Context, id string) (*domain.Book,
 
 // CreateBook menambahkan buku baru, sekaligus memvalidasi input
 func (s *bookService) CreateBook(ctx context.Context, input domain.Book) (*domain.Book, error) {
-	if input.Title == "" || input.Author == "" || input.PublishedYear <= 0 {
-		return nil, errors.New("invalid input")
+	if err := shared.ValidateBookInput(input); err != nil {
+		return nil, err
 	}
 	input.ID = uuid.New().String()
 	return s.repo.Create(ctx, input)
@@ -41,8 +41,8 @@ func (s *bookService) CreateBook(ctx context.Context, input domain.Book) (*domai
 
 // UpdateBook memperbarui data buku berdasarkan ID
 func (s *bookService) UpdateBook(ctx context.Context, id string, input domain.Book) (*domain.Book, error) {
-	if input.Title == "" || input.Author == "" || input.PublishedYear <= 0 {
-		return nil, errors.New("invalid input")
+	if err := shared.ValidateBookInput(input); err != nil {
+		return nil, err
 	}
 	return s.repo.Update(ctx, id, input)
 }
