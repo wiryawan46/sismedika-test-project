@@ -5,7 +5,6 @@ import (
 	"sync"
 )
 
-// MockBookRepository adalah mocks dari repository Book
 // MockStore adalah mock dari store yang digunakan di repository
 type MockStore struct {
 	Books map[string]storage.BookData
